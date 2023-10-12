@@ -8,18 +8,17 @@ from eth_account.messages import encode_defunct
 import uuid
 from fastapi import Response
 from pymongo import MongoClient
-from typing import TypedDict
+
 import requests
 
 Cluser = MongoClient('mongodb+srv://ant:7KDcdOtZC5ZlgQE2@cluster0.zw2lr.mongodb.net')
 
 
-class UserData(TypedDict):
-    address: str
-    nonce: str
-    signature: str
-    telegram_id: int
-    username: str 
+UserData={"address": str
+    "nonce": str
+    "signature": str
+    "telegram_id": int
+    "username": str }
     
 async def checkProphetBalance(address):
     headers = {'accept': 'application/json','content-type': 'application/json',}
