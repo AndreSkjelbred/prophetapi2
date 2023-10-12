@@ -14,11 +14,11 @@ import requests
 Cluser = MongoClient('mongodb+srv://ant:7KDcdOtZC5ZlgQE2@cluster0.zw2lr.mongodb.net')
 
 
-UserData={"address": ""
-    "nonce": ""
-    "signature": ""
-    "telegram_id": 0
-    "username": "" }
+UserData={"address": str,
+    "nonce": str,
+    "signature": str,
+    "telegram_id": int,
+    "username": str }
     
 async def checkProphetBalance(address):
     headers = {'accept': 'application/json','content-type': 'application/json',}
