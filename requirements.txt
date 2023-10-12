@@ -5,7 +5,7 @@ icecream
 
 web3
 hexbytes
-eth_account.messages
+eth_account
 uuid
 
 pymongo
