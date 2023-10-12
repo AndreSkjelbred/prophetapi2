@@ -1,5 +1,5 @@
 fastapi
-fastapi.middleware.cors
+
 icecream
 base64 
 json
@@ -7,7 +7,7 @@ web3
 hexbytes
 eth_account.messages
 uuid
-fastapi
+
 pymongo
 typing
 requests
