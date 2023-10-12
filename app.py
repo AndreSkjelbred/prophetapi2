@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Query ,HTTPException , Request
 from fastapi.middleware.cors import CORSMiddleware
 from icecream import ic
-import base64, json
+import base64, json 
 from web3 import Web3
 from hexbytes import HexBytes
 from eth_account.messages import encode_defunct
@@ -19,8 +19,8 @@ class UserData(TypedDict):
     nonce: str
     signature: str
     telegram_id: int
-    username: str
-
+    username: str 
+    
 async def checkProphetBalance(address):
     headers = {'accept': 'application/json','content-type': 'application/json',}
 
@@ -61,21 +61,10 @@ ProphetBots"""
         return True
     else:
         return False
-
+    
 
 app = FastAPI()
 
-# Define allowed origins (without trailing slash)
-allowed_origins = ["https://prophetbots.netlify.app","https://verify.prophetbots.com", "https://api-verify.prophetbots.com"]
-
-# Configure CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=allowed_origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 @app.get("/verify")
 async def read_root(data: str = Query(None)):
@@ -83,7 +72,7 @@ async def read_root(data: str = Query(None)):
     decoded_string = decoded_bytes.decode('utf-8')
 
     Data = json.loads(decoded_string)
-
+    print("Received request to /verify with data:", Data)
     if isinstance(Data, UserData):
         r = await Eth_check(Data['address'],Data['signature'],Data['nonce'],Data['username'])
         if r is True:
@@ -99,7 +88,7 @@ async def read_root(data: str = Query(None)):
                 elif UserDataID['address'] != Data['address']:
                     Cluser['ProphetVerify']['telegram_user_db'].update_one({'telegram_id':int(Data['telegram_id'])},{'$set':{'address':Data['address']}})
                     return {'meesage':True}
-
+                
             elif UserDataAddy and UserDataID == None:
                 if UserDataAddy['telegram_id'] == Data['telegram_id']:
                     return {'meesage':True}
@@ -107,19 +96,19 @@ async def read_root(data: str = Query(None)):
                     Cluser['ProphetVerify']['telegram_user_db'].update_one({'address':int(Data['address'])},{'$set':{'telegram_id':Data['telegram_id']}})
                     return {'meesage':True}
 
-
+                
             elif UserDataAddy and UserDataID:
                 if UserDataAddy == UserDataID:
                     if UserDataAddy['address'] != Data['address']:
-                        Cluser['ProphetVerify']['telegram_user_db'].update_one({'address':str(Data['address'])},{'$set':{'address':Data['address']}})
+                        Cluser['ProphetVerify']['telegram_user_db'].update_one({'address':str(Data['address'])},{'$set':{'address':Data['address']}})  
                         return {'meesage':True}
-
+                
                 elif UserDataAddy != UserDataID:
                     if UserDataID['address'] == Data['address']:
                         Cluser['ProphetVerify']['telegram_user_db'].delete_one({'telegram_id':int(Data['telegram_id'])})
                         Cluser['ProphetVerify']['telegram_user_db'].update_one({'address':str(Data['address'])},{'$set':{'telegram_id':Data['telegram_id']}})
                         return {'meesage':True}
-
+                    
             elif UserDataAddy == None and UserDataID == None:
                 Cluser['ProphetVerify']['telegram_user_db'].insert_one({'telegram_id':int(Data['telegram_id']),'address':str(Data['address'])})
         else:
@@ -131,4 +120,3 @@ async def return_nonce(response: Response):
     new_uuid = uuid.uuid4()
     response.headers['Token'] = str(new_uuid)
     response.headers['Access-Control-Expose-Headers'] = 'Token'
-    return {'meesage':True}
